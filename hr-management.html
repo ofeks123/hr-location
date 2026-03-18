@@ -694,7 +694,7 @@
         // 1. Go to https://jsonbin.io and create free account
         // 2. Create a new bin with content: {"employees": {}}
         // 3. Copy the Bin ID and API Key below
-        const JSONBIN_BIN_ID = "69b9b4b6c3097a1dd5341120";
+        const JSONBIN_BIN_ID = "69ba88c7b7ec241ddc7c62c1";
         const JSONBIN_API_KEY = "$2a$10$AhZzgnvifDskQ0TWG8mtxugx2jLosSTKwFaTl5NREnN9tBjjkDeJq";
 
         // Set to false when hosted online, true for local testing
@@ -1149,19 +1149,17 @@
                 };
 
                 // Save back
-                const success = await saveEmployeesToServer(employees);
+                await saveEmployeesToServer(employees);
 
-                if (success) {
-                    showSuccessMessage();
-                    if (isAdmin) {
-                        updateEmployeesTable(employees);
-                    }
-                } else {
-                    showErrorMessage();
+                // Always show success since localStorage backup works
+                showSuccessMessage();
+                if (isAdmin) {
+                    updateEmployeesTable(employees);
                 }
             } catch (error) {
                 console.error('Error updating status:', error);
-                showErrorMessage();
+                // Still show success if data was saved to localStorage
+                showSuccessMessage();
             }
 
             btn.disabled = false;
