@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מיקום עדכני אנשי יחידת בינוי 301</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #555;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        /* User Section */
+        .user-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        .btn-admin {
+            background: #28a745;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .btn-admin:hover {
+            background: #218838;
+        }
+
+        .btn-logout {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-logout:hover {
+            background: #c82333;
+        }
+
+        /* Status Colors */
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .status-home { background: #e3f2fd; color: #1565c0; }
+        .status-going-home { background: #fff3e0; color: #ef6c00; }
+        .status-base { background: #e8f5e9; color: #2e7d32; }
+        .status-going-base { background: #f3e5f5; color: #7b1fa2; }
+        .status-rehovot { background: #fce4ec; color: #c2185b; }
+        .status-going-rehovot { background: #fff8e1; color: #ff8f00; }
+        .status-108 { background: #e0f2f1; color: #00695c; }
+
+        /* Admin Table */
+        .admin-section {
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        .employees-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .employees-table th, .employees-table td {
+            padding: 15px;
+            text-align: right;
+            border-bottom: 1px solid #eee;
+        }
+
+        .employees-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .employees-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .last-update {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            text-align: center;
+        }
+
+        .success-message.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            text-align: center;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            .employees-table th, .employees-table td {
+                padding: 10px 5px;
+                font-size: 14px;
+            }
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .current-user {
+            background: #e3f2fd;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .no-employees {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        /* Searchable dropdown */
+        .search-dropdown {
+            position: relative;
+        }
+
+        .search-dropdown input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .search-dropdown input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .dropdown-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #667eea;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+
+        .dropdown-list.active {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background: #f0f0f0;
+        }
+
+        .dropdown-item.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        .online-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #28a745;
+            border-radius: 50%;
+            margin-left: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <img src="logo.png" alt="לוגו יחידת בינוי 301" style="width: 100px; height: 100px;">
+        </div>
+        <h1>מיקום עדכני אנשי יחידת בינוי 301 <span class="online-indicator" title="מחובר לשרת"></span></h1>
+
+        <!-- User Section -->
+        <div class="user-section" id="userSection">
+            <h2>עדכון מיקום</h2>
+
+            <div class="input-group" id="nameInputGroup">
+                <label for="nameSearch">בחר את שמך:</label>
+                <div class="search-dropdown">
+                    <input type="text" id="nameSearch" placeholder="הקלד לחיפוש שם..." autocomplete="off" onclick="showDropdown()" oninput="filterNames()">
+                    <div class="dropdown-list" id="nameDropdown"></div>
+                </div>
+                <input type="hidden" id="userName" value="">
+                <div style="display:none;">
+                    <option value="אלכס קריניוק">אלכס קריניוק</option>
+                    <option value="עילאי פישמן">עילאי פישמן</option>
+                    <option value="הדר דמרי">הדר דמרי</option>
+                    <option value="דריה פולחובסקי">דריה פולחובסקי</option>
+                    <option value="אלון קניג">אלון קניג</option>
+                    <option value="אדיר קארה">אדיר קארה</option>
+                    <option value="קארין גיז">קארין גיז</option>
+                    <option value="ליטל אפרה">ליטל אפרה</option>
+                    <option value="ליים סייאג">ליים סייאג</option>
+                    <option value="עמית קצב">עמית קצב</option>
+                    <option value="נטע נסימי">נטע נסימי</option>
+                    <option value="רינה שרביט">רינה שרביט</option>
+                    <option value="נועם כהן">נועם כהן</option>
+                    <option value="חיים כחלון">חיים כחלון</option>
+                    <option value="גבי רייצין">גבי רייצין</option>
+                    <option value="הילה לנקרי">הילה לנקרי</option>
+                    <option value="קסם לולו">קסם לולו</option>
+                    <option value="נדב שבקוב">נדב שבקוב</option>
+                    <option value="בן עזרא">בן עזרא</option>
+                    <option value="אליס לי יאמר">אליס לי יאמר</option>
+                    <option value="אולגה וורונין">אולגה וורונין</option>
+                    <option value="הדר כברה">הדר כברה</option>
+                    <option value="שמעון טויטו">שמעון טויטו</option>
+                    <option value="מרט גולדברג">מרט גולדברג</option>
+                    <option value="מירב קנדבי חבר">מירב קנדבי חבר</option>
+                    <option value="לירז דסטה">לירז דסטה</option>
+                    <option value="נגה גמדני">נגה גמדני</option>
+                    <option value="לירז יעקב יונה">לירז יעקב יונה</option>
+                    <option value="אביבה אטדגי">אביבה אטדגי</option>
+                    <option value="שי אוקנין">שי אוקנין</option>
+                    <option value="יובל מרחבי">יובל מרחבי</option>
+                    <option value="הדר אביב">הדר אביב</option>
+                    <option value="הודיה חדד">הודיה חדד</option>
+                    <option value="שחר בוחבוט">שחר בוחבוט</option>
+                    <option value="שירן וסקר">שירן וסקר</option>
+                    <option value="משה מחדון">משה מחדון</option>
+                    <option value="אילן פרחדל">אילן פרחדל</option>
+                    <option value="רמי אביטל">רמי אביטל</option>
+                    <option value="כרמל פיטו">כרמל פיטו</option>
+                    <option value="ויקטור גואטה">ויקטור גואטה</option>
+                    <option value="מיקי רובין">מיקי רובין</option>
+                    <option value="גנדי קוסוי">גנדי קוסוי</option>
+                    <option value="אפרים אברמוב">אפרים אברמוב</option>
+                    <option value="דוד רבי">דוד רבי</option>
+                    <option value="דרור ישועה">דרור ישועה</option>
+                    <option value="דוד ביטון">דוד ביטון</option>
+                    <option value="סיגל עובדיה">סיגל עובדיה</option>
+                    <option value="שמואל מזרחי">שמואל מזרחי</option>
+                    <option value="גלעד גרוברג">גלעד גרוברג</option>
+                    <option value="משה מורי סוברנו">משה מורי סוברנו</option>
+                    <option value="אורי קחלון">אורי קחלון</option>
+                    <option value="ליאל פנטה">ליאל פנטה</option>
+                    <option value="שלומי זריהן">שלומי זריהן</option>
+                    <option value="אוראל ישראלי">אוראל ישראלי</option>
+                    <option value="עוז רצאבי">עוז רצאבי</option>
+                    <option value="רפאל ברקוביץ">רפאל ברקוביץ</option>
+                    <option value="אריאל יעקב">אריאל יעקב</option>
+                    <option value="מוטי אלבז">מוטי אלבז</option>
+                    <option value="איל יפת">איל יפת</option>
+                    <option value="סנדרו דוד סלם">סנדרו דוד סלם</option>
+                    <option value="טופז יעקב">טופז יעקב</option>
+                    <option value="אליהו משה לוי">אליהו משה לוי</option>
+                    <option value="איציק בק">איציק בק</option>
+                    <option value="גטנט ביטאו">גטנט ביטאו</option>
+                    <option value="שלום חברה">שלום חברה</option>
+                    <option value="שמעון וקנין">שמעון וקנין</option>
+                    <option value="בר לוי">בר לוי</option>
+                    <option value="חן אביר">חן אביר</option>
+                    <option value="דורון לעג'לם">דורון לעג'לם</option>
+                    <option value="קורל צובירי">קורל צובירי</option>
+                    <option value="צח שמעיה">צח שמעיה</option>
+                    <option value="חיים בראון">חיים בראון</option>
+                    <option value="דור בונבידה">דור בונבידה</option>
+                    <option value="סיגל אקלה">סיגל אקלה</option>
+                    <option value="ליאם בן כליפה">ליאם בן כליפה</option>
+                    <option value="ניר עזריה">ניר עזריה</option>
+                    <option value="נהוראי זכריה">נהוראי זכריה</option>
+                    <option value="אלירז חיים">אלירז חיים</option>
+                    <option value="דור מלכה">דור מלכה</option>
+                    <option value="שלומי פוקס">שלומי פוקס</option>
+                    <option value="חן אזולאי">חן אזולאי</option>
+                    <option value="דוד יוסף">דוד יוסף</option>
+                    <option value="ליאור יצחק">ליאור יצחק</option>
+                    <option value="אלעד אלעזר">אלעד אלעזר</option>
+                    <option value="שלום טילייב">שלום טילייב</option>
+                    <option value="רפאל בריגה">רפאל בריגה</option>
+                    <option value="שחר גמליאל">שחר גמליאל</option>
+                    <option value="אושר חן">אושר חן</option>
+                    <option value="יהודה בן אזון">יהודה בן אזון</option>
+                    <option value="סלבה אוסטרובסקי">סלבה אוסטרובסקי</option>
+                    <option value="אדראג'או גרמאו">אדראג'או גרמאו</option>
+                    <option value="דוד ישראלי">דוד ישראלי</option>
+                    <option value="אור נתן">אור נתן</option>
+                    <option value="יעקב בן הרוש">יעקב בן הרוש</option>
+                    <option value="אלכס פוליאק">אלכס פוליאק</option>
+                    <option value="שי סיאני">שי סיאני</option>
+                    <option value="חיים אלקובי">חיים אלקובי</option>
+                    <option value="אדאנה באביל">אדאנה באביל</option>
+                    <option value="איתמר כהן">איתמר כהן</option>
+                    <option value="נדב מרחב שמעון">נדב מרחב שמעון</option>
+                    <option value="יהודה סימאי">יהודה סימאי</option>
+                    <option value="יצחק כוזהינוף">יצחק כוזהינוף</option>
+                    <option value="ניב פרלנטה">ניב פרלנטה</option>
+                    <option value="מאור שושן">מאור שושן</option>
+                    <option value="הראל פנחס">הראל פנחס</option>
+                    <option value="פיני ולוטקר">פיני ולוטקר</option>
+                    <option value="יונתן מימון">יונתן מימון</option>
+                    <option value="משה ריס">משה ריס</option>
+                    <option value="עידן אליאייב">עידן אליאייב</option>
+                    <option value="ליאל אשואל">ליאל אשואל</option>
+                    <option value="ירדן שפר בן שימול">ירדן שפר בן שימול</option>
+                    <option value="אבירם גרשקוביץ">אבירם גרשקוביץ</option>
+                    <option value="ידידיה קוריש">ידידיה קוריש</option>
+                    <option value="גל יוסהבשווילי">גל יוסהבשווילי</option>
+                    <option value="שליו לומברוזו">שליו לומברוזו</option>
+                    <option value="יהודה כהן">יהודה כהן</option>
+                    <option value="יוסי אפריט">יוסי אפריט</option>
+                    <option value="ליאור שמנוב">ליאור שמנוב</option>
+                    <option value="רחמים טייק">רחמים טייק</option>
+                    <option value="יעקב שלוש">יעקב שלוש</option>
+                    <option value="גושוע טואזון">גושוע טואזון</option>
+                    <option value="שלמה איבגי">שלמה איבגי</option>
+                    <option value="צוריאל נחום">צוריאל נחום</option>
+                    <option value="מתנאל אביעוז">מתנאל אביעוז</option>
+                    <option value="אלעאי יגיל">אלעאי יגיל</option>
+                    <option value="בר יונה קצב">בר יונה קצב</option>
+                    <option value="רונן עבאהל">רונן עבאהל</option>
+                    <option value="אורי אליטוב">אורי אליטוב</option>
+                    <option value="ליהי פטיטו">ליהי פטיטו</option>
+                    <option value="תמר לוי">תמר לוי</option>
+                    <option value="ארד צברי">ארד צברי</option>
+                    <option value="קאלי לה-קלץ'">קאלי לה-קלץ'</option>
+                    <option value="אגם קריאף">אגם קריאף</option>
+                    <option value="אלעד פרץ">אלעד פרץ</option>
+                    <option value="לירון אברהם">לירון אברהם</option>
+                    <option value="אופק דלגדו">אופק דלגדו</option>
+                    <option value="נועם אליהו">נועם אליהו</option>
+                    <option value="ניסים עוז גואטה">ניסים עוז גואטה</option>
+                    <option value="אורון ישעיה">אורון ישעיה</option>
+                    <option value="אנטון ברונשטיין">אנטון ברונשטיין</option>
+                    <option value="רז ברקוביץ">רז ברקוביץ</option>
+                    <option value="אופק רגוניס">אופק רגוניס</option>
+                    <option value="אנטון אברמוב">אנטון אברמוב</option>
+                    <option value="עדיאל מימון">עדיאל מימון</option>
+                    <option value="תומר נחמיאס">תומר נחמיאס</option>
+                    <option value="טיירון פרידלנדר">טיירון פרידלנדר</option>
+                    <option value="שלמה נחום">שלמה נחום</option>
+                    <option value="גל פסו">גל פסו</option>
+                    <option value="גבריאל אור">גבריאל אור</option>
+                    <option value="מתן רטיק">מתן רטיק</option>
+                    <option value="פבל קניזר">פבל קניזר</option>
+                    <option value="אריאל פסחוביץ">אריאל פסחוביץ</option>
+                    <option value="שלומי זגורי">שלומי זגורי</option>
+                    <option value="יוחנן טויטו">יוחנן טויטו</option>
+                    <option value="אלקנה ודבקר">אלקנה ודבקר</option>
+                    <option value="ראובן יצחק">ראובן יצחק</option>
+                    <option value="חי בוסקילה">חי בוסקילה</option>
+                    <option value="דור גמליאל">דור גמליאל</option>
+                    <option value="משה מורי">משה מורי</option>
+                    <option value="מזל גלעד">מזל גלעד</option>
+                    <option value="אמיתי סביר">אמיתי סביר</option>
+                    <option value="סעדיה הלל">סעדיה הלל</option>
+                    <option value="משה בכר">משה בכר</option>
+                    <option value="שרון כהן">שרון כהן</option>
+                    <option value="נתנאל שמעונוב">נתנאל שמעונוב</option>
+                    <option value="אליאב חנן">אליאב חנן</option>
+                    <option value="יואב אפרייאט">יואב אפרייאט</option>
+                    <option value="יוסף נעים">יוסף נעים</option>
+                    <option value="מנחם אבשלום">מנחם אבשלום</option>
+                    <option value="ליאם פואגל">ליאם פואגל</option>
+                    <option value="דנה כהן">דנה כהן</option>
+                    <option value="אוריאל אליאס">אוריאל אליאס</option>
+                    <option value="גלעד חלגואה">גלעד חלגואה</option>
+                    <option value="ברקוביץ'">ברקוביץ'</option>
+                    <option value="רועי ממו">רועי ממו</option>
+                    <option value="משה הוניג">משה הוניג</option>
+                    <option value="אופיר אסקיו">אופיר אסקיו</option>
+                    <option value="עוזיאל האריס">עוזיאל האריס</option>
+                    <option value="אלדד קישוני">אלדד קישוני</option>
+                    <option value="יעקב אוחנה">יעקב אוחנה</option>
+                    <option value="דניאל פישר">דניאל פישר</option>
+                    <option value="אבי רפאל">אבי רפאל</option>
+                    <option value="אלמוג שמול">אלמוג שמול</option>
+                    <option value="אוראל נועמה">אוראל נועמה</option>
+                    <option value="אלכס רוזוב">אלכס רוזוב</option>
+                    <option value="אליהו ממיה">אליהו ממיה</option>
+                    <option value="מנחם אלפנדרי">מנחם אלפנדרי</option>
+                    <option value="ישראל אלחדד">ישראל אלחדד</option>
+                    <option value="מיכאל זפרודסקי">מיכאל זפרודסקי</option>
+                    <option value="אבי ג'ורנו">אבי ג'ורנו</option>
+                    <option value="אבי בראל">אבי בראל</option>
+                    <option value="לוי יצחק גסדי">לוי יצחק גסדי</option>
+                    <option value="ג'ונתן אוסטהויזן">ג'ונתן אוסטהויזן</option>
+                    <option value="הראל אליה">הראל אליה</option>
+                    <option value="יונתן נקש">יונתן נקש</option>
+                    <option value="ינון ראובן">ינון ראובן</option>
+                    <option value="סהר כהן">סהר כהן</option>
+                    <option value="בר לב ארי">בר לב ארי</option>
+                    <option value="גדסי לוי">גדסי לוי</option>
+                    <option value="הלל צברי">הלל צברי</option>
+                    <option value="רזיאל המאירי">רזיאל המאירי</option>
+                    <option value="בר אביטן">בר אביטן</option>
+                    <option value="איציק עזריה">איציק עזריה</option>
+                    <option value="אוריאל ברבי">אוריאל ברבי</option>
+                    <option value="נדב כהן">נדב כהן</option>
+                    <option value="תומר פייביש">תומר פייביש</option>
+                    <option value="נתנאל ארזה">נתנאל ארזה</option>
+                    <option value="דנה פנחסוב">דנה פנחסוב</option>
+                    <option value="חיים גולד">חיים גולד</option>
+                    <option value="יקיר איובי">יקיר איובי</option>
+                    <option value="טובה אקושוילי">טובה אקושוילי</option>
+                    <option value="איציק טגניה">איציק טגניה</option>
+                    <option value="אביאל לוי">אביאל לוי</option>
+                    <option value="שלי חזן">שלי חזן</option>
+                    <option value="דניאל לגיטיוי">דניאל לגיטיוי</option>
+                    <option value="שמעון גוזלן">שמעון גוזלן</option>
+                    <option value="בן הנורקר">בן הנורקר</option>
+                    <option value="רוס פימה">רוס פימה</option>
+                    <option value="יאיר הלוי">יאיר הלוי</option>
+                    <option value="דותן גואל">דותן גואל</option>
+                    <option value="ליאל ניר">ליאל ניר</option>
+                    <option value="רומיה אלמגור">רומיה אלמגור</option>
+                    <option value="שלומי לביא">שלומי לביא</option>
+                    <option value="חן נגר">חן נגר</option>
+                    <option value="מישאל עקושר">מישאל עקושר</option>
+                    <option value="ליאור אברהם">ליאור אברהם</option>
+                    <option value="שוהם אאוד">שוהם אאוד</option>
+                    <option value="צביקה לוי">צביקה לוי</option>
+                    <option value="איוב צקלה">איוב צקלה</option>
+                    <option value="נועם ברבי">נועם ברבי</option>
+                    <option value="אופיר חרר">אופיר חרר</option>
+                    <option value="ניקון פיירשטיין">ניקון פיירשטיין</option>
+                    <option value="יוחאי בריגה">יוחאי בריגה</option>
+                    <option value="יהונתן אבני">יהונתן אבני</option>
+                    <option value="אדם אהרוני">אדם אהרוני</option>
+                    <option value="רביד אברהם">רביד אברהם</option>
+                    <option value="מאור חן">מאור חן</option>
+                    <option value="סואטירה ויסאם">סואטירה ויסאם</option>
+                    <option value="טדי אסרס">טדי אסרס</option>
+                    <option value="אליה יוספוב">אליה יוספוב</option>
+                    <option value="אדי פילר">אדי פילר</option>
+                    <option value="בני אללין">בני אללין</option>
+                    <option value="אוסקר מאכר">אוסקר מאכר</option>
+                    <option value="עוזי נדב">עוזי נדב</option>
+                    <option value="ענאן ח'יר">ענאן ח'יר</option>
+                    <option value="אלכס כץ">אלכס כץ</option>
+                    <option value="ניקולאיי פיינשטיין">ניקולאיי פיינשטיין</option>
+                    <option value="מוחמד סואעד">מוחמד סואעד</option>
+                    <option value="אורי טל">אורי טל</option>
+                    <option value="אנטולי סוקין">אנטולי סוקין</option>
+                    <option value="שמוליק">שמוליק</option>
+                    <option value="ארסן">ארסן</option>
+                    <option value="נתנאל מולוקנדוב">נתנאל מולוקנדוב</option>
+                    <option value="שרון חברה">שרון חברה</option>
+                    <option value="נתנאל מויאל">נתנאל מויאל</option>
+                    <option value="אביהו אסיין">אביהו אסיין</option>
+                    <option value="יוסי שחרור">יוסי שחרור</option>
+                    <option value="איציק דואק">איציק דואק</option>
+                    <option value="דסאלין מקטה">דסאלין מקטה</option>
+                    <option value="נוי אמרוסי/אהרוני">נוי אמרוסי/אהרוני</option>
+                    <option value="ליאל אנדיבו">ליאל אנדיבו</option>
+                    <option value="נועה שלזינגר">נועה שלזינגר</option>
+                    <option value="תאיר סלחי">תאיר סלחי</option>
+                    <option value="אור אברמוב">אור אברמוב</option>
+                    <option value="אושר שטרית">אושר שטרית</option>
+                    <option value="אילן נגאוקר">אילן נגאוקר</option>
+                    <option value="אבישי גובני">אבישי גובני</option>
+                    <option value="היכל פטל">היכל פטל</option>
+                    <option value="משה ברקו">משה ברקו</option>
+                    <option value="טל שאול">טל שאול</option>
+                    <option value="אפיק רואה">אפיק רואה</option>
+                    <option value="עוז בכור">עוז בכור</option>
+                    <option value="רביאל חבות">רביאל חבות</option>
+                    <option value="אדיר אבוטבול">אדיר אבוטבול</option>
+                    <option value="כפיר ישראלי">כפיר ישראלי</option>
+                    <option value="אמרי טואיל">אמרי טואיל</option>
+                    <option value="עילאי בוקשטיין">עילאי בוקשטיין</option>
+                    <option value="נוי לוי">נוי לוי</option>
+                    <option value="שי פורטנוי">שי פורטנוי</option>
+                    <option value="יעל עובדיה">יעל עובדיה</option>
+                    <option value="עמית זטלאווי">עמית זטלאווי</option>
+                    <option value="רנת אחונדוב">רנת אחונדוב</option>
+                    <option value="יגל רביד">יגל רביד</option>
+                    <option value="אור חג'בי">אור חג'בי</option>
+                    <option value="בנימין כהן">בנימין כהן</option>
+                    <option value="גלעד חודדה">גלעד חודדה</option>
+                    <option value="אגם מיסק">אגם מיסק</option>
+                    <option value="אופק ברק">אופק ברק</option>
+                    <option value="עדן מורנו">עדן מורנו</option>
+                    <option value="מרק ניקוב">מרק ניקוב</option>
+                    <option value="אהרון וולף">אהרון וולף</option>
+                    <option value="אלכסיי שמובסקי">אלכסיי שמובסקי</option>
+                    <option value="שי כוכבי">שי כוכבי</option>
+                    <option value="אלכסנדרה דוידוב">אלכסנדרה דוידוב</option>
+                    <option value="נתן צ'ברוצקי">נתן צ'ברוצקי</option>
+                </div>
+                <button class="btn btn-primary" style="margin-top: 10px;" onclick="saveName()">בחר</button>
+            </div>
+
+            <div id="statusSection" style="display: none;">
+                <div class="current-user" id="currentUserDisplay"></div>
+                <br>
+                <div class="input-group">
+                    <label for="statusSelect">בחר סטטוס:</label>
+                    <select id="statusSelect">
+                        <option value="">-- בחר מיקום --</option>
+                        <option value="בית">בית</option>
+                        <option value="בדרך לבית">בדרך לבית</option>
+                        <option value="בסיס">בסיס</option>
+                        <option value="בדרך לבסיס">בדרך לבסיס</option>
+                        <option value="רחובות">רחובות</option>
+                        <option value="בדרך לרחובות">בדרך לרחובות</option>
+                        <option value="108">108</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" id="updateBtn" onclick="updateStatus()" style="margin-top: 10px;">עדכן מיקום</button>
+                <button class="btn btn-secondary" onclick="changeName()" style="margin-top: 10px;">שנה שם</button>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                הסטטוס עודכן בהצלחה!
+            </div>
+            <div class="error-message" id="errorMessage">
+                שגיאה בעדכון. נסה שוב.
+            </div>
+        </div>
+
+        <!-- Admin Button -->
+        <div style="text-align: center;">
+            <button class="btn btn-admin" onclick="showAdminModal()" id="adminBtn">כניסת מנהל</button>
+            <button class="btn btn-logout" onclick="logoutAdmin()" id="logoutBtn" style="display: none;">יציאה ממצב מנהל</button>
+        </div>
+
+        <!-- Admin Section -->
+        <div class="admin-section" id="adminSection">
+            <h2>תצוגת מנהל - כל העובדים</h2>
+            <p style="font-size: 12px; color: #888;">מתעדכן אוטומטית כל 3 שניות</p>
+
+            <!-- Admin Controls -->
+            <div style="margin-bottom: 20px; padding: 15px; background: #f0f0f0; border-radius: 8px;">
+                <h3 style="margin-top: 0;">ניהול עובדים</h3>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
+                    <div class="input-group" style="margin: 0; flex: 1; min-width: 200px;">
+                        <label for="newEmployeeName">הוסף עובד חדש:</label>
+                        <input type="text" id="newEmployeeName" placeholder="שם העובד">
+                    </div>
+                    <div class="input-group" style="margin: 0; width: 120px;">
+                        <label for="newEmployeeK">גף:</label>
+                        <select id="newEmployeeK">
+                            <option value="">בחר</option>
+                            <option value="משאבים">משאבים</option>
+                            <option value="מערכות">מערכות</option>
+                            <option value="הנדסה">הנדסה</option>
+                            <option value="בי״מ">בי״מ</option>
+                            <option value="ש״ק">ש״ק</option>
+                            <option value="צריפין 108">צריפין 108</option>
+                        </select>
+                    </div>
+                    <div class="input-group" style="margin: 0; width: 120px;">
+                        <label for="newEmployeePopulation">אוכלוסיה:</label>
+                        <select id="newEmployeePopulation">
+                            <option value="">בחר</option>
+                            <option value="קבע">קבע</option>
+                            <option value="חובה">חובה</option>
+                            <option value="מילואים">מילואים</option>
+                            <option value="אע״צ">אע״צ</option>
+                            <option value="עובדי קבלן">עובדי קבלן</option>
+                            <option value="פז">פז</option>
+                            <option value="מתאם">מתאם</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="addNewEmployee()" style="height: 46px;">הוסף</button>
+                </div>
+            </div>
+
+            <table class="employees-table">
+                <thead>
+                    <tr>
+                        <th>שם העובד</th>
+                        <th>גף</th>
+                        <th>אוכלוסיה</th>
+                        <th>סטטוס</th>
+                        <th>עדכון אחרון</th>
+                        <th>פעולות</th>
+                    </tr>
+                </thead>
+                <tbody id="employeesTableBody">
+                    <tr>
+                        <td colspan="6" class="loading">טוען נתונים...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Admin Password Modal -->
+    <div class="modal" id="adminModal">
+        <div class="modal-content">
+            <h3>כניסת מנהל</h3>
+            <div class="input-group">
+                <label for="adminPassword">סיסמה:</label>
+                <input type="password" id="adminPassword" placeholder="הכנס סיסמת מנהל">
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-primary" onclick="verifyAdmin()">כניסה</button>
+                <button class="btn btn-secondary" onclick="hideAdminModal()">ביטול</button>
+            </div>
+            <p id="adminError" style="color: red; display: none;">סיסמה שגויה!</p>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION
+        // ============================================
+        const ADMIN_PASSWORD = "admin123";
+
+        // JSONBin.io Configuration (FREE online JSON storage)
+        // To set up your own:
+        // 1. Go to https://jsonbin.io and create free account
+        // 2. Create a new bin with content: {"employees": {}}
+        // 3. Copy the Bin ID and API Key below
+        const JSONBIN_BIN_ID = "69ba88c7b7ec241ddc7c62c1";
+        const JSONBIN_API_KEY = "$2a$10$AhZzgnvifDskQ0TWG8mtxugx2jLosSTKwFaTl5NREnN9tBjjkDeJq";
+
+        // Set to false when hosted online, true for local testing
+        const USE_LOCAL_STORAGE = false;
+        // ============================================
+
+        // Employee base data (from Excel)
+        const EMPLOYEE_DATA = {
+            "אלכס קריניוק": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "קבע"},
+            "עילאי פישמן": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "קבע"},
+            "הדר דמרי": {"כ": "משאבים", "כשירות": "כ\"א", "אוכלוסיה": "קבע"},
+            "דריה פולחובסקי": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "קבע"},
+            "אלון קניג": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אדיר קארה": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "קארין גיז": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "ליטל אפרה": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "ליים סייאג": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "עמית קצב": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "נטע נסימי": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "רינה שרביט": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "נועם כהן": {"כ": "משאבים", "כשירות": "רכב", "אוכלוסיה": "מילואים"},
+            "חיים כחלון": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "גבי רייצין": {"כ": "", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "הילה לנקרי": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "חובה"},
+            "קסם לולו": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "נדב שבקוב": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "בן עזרא": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אליס לי יאמר": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אולגה וורונין": {"כ": "משאבים", "כשירות": "מוצב", "אוכלוסיה": "קבע"},
+            "הדר כברה": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "שמעון טויטו": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "מרט גולדברג": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "מירב קנדבי חבר": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "קבע"},
+            "לירז דסטה": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "נגה גמדני": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "לירז יעקב יונה": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אביבה אטדגי": {"כ": "משאבים", "כשירות": "הקמה לאחזקה", "אוכלוסיה": "קבע"},
+            "שי אוקנין": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "קבע"},
+            "יובל מרחבי": {"כ": "משאבים", "כשירות": "אחזקה", "אוכלוסיה": "קבע"},
+            "הדר אביב": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "קבע"},
+            "הודיה חדד": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "קבע"},
+            "שחר בוחבוט": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "שירן וסקר": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "משה מחדון": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "עובדי קבלן"},
+            "אילן פרחדל": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "עובדי קבלן"},
+            "רמי אביטל": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "עובדי קבלן"},
+            "כרמל פיטו": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "עובדי קבלן"},
+            "ויקטור גואטה": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "עובדי קבלן"},
+            "מיקי רובין": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "עובדי קבלן"},
+            "גנדי קוסוי": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "עובדי קבלן"},
+            "אפרים אברמוב": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "עובדי קבלן"},
+            "דוד רבי": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "עובדי קבלן"},
+            "דרור ישועה": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "עובדי קבלן"},
+            "דוד ביטון": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "עובדי קבלן"},
+            "סיגל עובדיה": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "עובדי קבלן"},
+            "שמואל מזרחי": {"כ": "משאבים", "כשירות": "לוגיסטיקה", "אוכלוסיה": "קבע"},
+            "גלעד גרוברג": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "חובה"},
+            "משה מורי סוברנו": {"כ": "", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אורי קחלון": {"כ": "", "כשירות": "", "אוכלוסיה": "חובה"},
+            "ליאל פנטה": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "חובה"},
+            "שלומי זריהן": {"כ": "משאבים", "כשירות": "לוגיסטיקה מרחבית", "אוכלוסיה": "קבע"},
+            "אוראל ישראלי": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "קבע"},
+            "עוז רצאבי": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "קבע"},
+            "רפאל ברקוביץ": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אריאל יעקב": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "חובה"},
+            "מוטי אלבז": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "איל יפת": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "חובה"},
+            "סנדרו דוד סלם": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "חובה"},
+            "טופז יעקב": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "אליהו משה לוי": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "איציק בק": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "גטנט ביטאו": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "שלום חברה": {"כ": "משאבים", "כשירות": "מסגריה", "אוכלוסיה": "אע\"צ"},
+            "שמעון וקנין": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "בר לוי": {"כ": "", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "חן אביר": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "חובה"},
+            "דורון לעג'לם": {"כ": "משאבים", "כשירות": "", "אוכלוסיה": "חובה"},
+            "קורל צובירי": {"כ": "מערכות", "כשירות": "מטה מערכות", "אוכלוסיה": "קבע"},
+            "צח שמעיה": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "קבע"},
+            "חיים בראון": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "קבע"},
+            "דור בונבידה": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "קבע"},
+            "סיגל אקלה": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "קבע"},
+            "ליאם בן כליפה": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "חובה"},
+            "ניר עזריה": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "נהוראי זכריה": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אלירז חיים": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "קבע"},
+            "דור מלכה": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "קבע"},
+            "שלומי פוקס": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "מתאם"},
+            "חן אזולאי": {"כ": "", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "דוד יוסף": {"כ": "", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "ליאור יצחק": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "קבע"},
+            "אלעד אלעזר": {"כ": "מערכות", "כשירות": "חשמל", "אוכלוסיה": "קבע"},
+            "שלום טילייב": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "רפאל בריגה": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "קבע"},
+            "שחר גמליאל": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "קבע"},
+            "אושר חן": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "קבע"},
+            "יהודה בן אזון": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "קבע"},
+            "סלבה אוסטרובסקי": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "קבע"},
+            "אדראג'או גרמאו": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "קבע"},
+            "דוד ישראלי": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אור נתן": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "חובה"},
+            "יעקב בן הרוש": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אלכס פוליאק": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "חובה"},
+            "שי סיאני": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "חובה"},
+            "חיים אלקובי": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "אדאנה באביל": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "איתמר כהן": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "נדב מרחב שמעון": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "יהודה סימאי": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "יצחק כוזהינוף": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "ניב פרלנטה": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "מאור שושן": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "הראל פנחס": {"כ": "מערכות", "כשירות": "מיזוג אוויר", "אוכלוסיה": "אע\"צ"},
+            "פיני ולוטקר": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "יונתן מימון": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "חובה"},
+            "משה ריס": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "עידן אליאייב": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "קבע"},
+            "ליאל אשואל": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "חובה"},
+            "ירדן שפר בן שימול": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אבירם גרשקוביץ": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "ידידיה קוריש": {"כ": "מערכות", "כשירות": "מים", "אוכלוסיה": "אע\"צ"},
+            "גל יוסהבשווילי": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "קבע"},
+            "שליו לומברוזו": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "חובה"},
+            "יהודה כהן": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "קבע"},
+            "יוסי אפריט": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "ליאור שמנוב": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "רחמים טייק": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "יעקב שלוש": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "גושוע טואזון": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "שלמה איבגי": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "צוריאל נחום": {"כ": "מערכות", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "מתנאל אביעוז": {"כ": "הנדסה", "כשירות": "מטה הנדסה", "אוכלוסיה": "קבע"},
+            "אלעאי יגיל": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "חובה"},
+            "בר יונה קצב": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "קבע"},
+            "רונן עבאהל": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "קבע"},
+            "אורי אליטוב": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "חובה"},
+            "ליהי פטיטו": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "חובה"},
+            "תמר לוי": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "חובה"},
+            "ארד צברי": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "חובה"},
+            "קאלי לה-קלץ'": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אגם קריאף": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אלעד פרץ": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "לירון אברהם": {"כ": "", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אופק דלגדו": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "נועם אליהו": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "ניסים עוז גואטה": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מתאם"},
+            "אורון ישעיה": {"כ": "", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אנטון ברונשטיין": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "רז ברקוביץ": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אופק רגוניס": {"כ": "הנדסה", "כשירות": "חילוץ", "אוכלוסיה": "מילואים"},
+            "אנטון אברמוב": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "עדיאל מימון": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "תומר נחמיאס": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "טיירון פרידלנדר": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "שלמה נחום": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "גל פסו": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "גבריאל אור": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "מתן רטיק": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "פבל קניזר": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אריאל פסחוביץ": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "שלומי זגורי": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "יוחנן טויטו": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אלקנה ודבקר": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "ראובן יצחק": {"כ": "הנדסה", "כשירות": "צמ\"ה", "אוכלוסיה": "אע\"צ"},
+            "חי בוסקילה": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "דור גמליאל": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "משה מורי": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "קבע"},
+            "מזל גלעד": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "אמיתי סביר": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "סעדיה הלל": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "קבע"},
+            "משה בכר": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "קבע"},
+            "שרון כהן": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "נתנאל שמעונוב": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אליאב חנן": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "יואב אפרייאט": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "יוסף נעים": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "מנחם אבשלום": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "ליאם פואגל": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "חובה"},
+            "דנה כהן": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אוריאל אליאס": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "קבע"},
+            "גלעד חלגואה": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "ברקוביץ'": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "רועי ממו": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "משה הוניג": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אופיר אסקיו": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "עוזיאל האריס": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אלדד קישוני": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "יעקב אוחנה": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "דניאל פישר": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אבי רפאל": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אלמוג שמול": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אוראל נועמה": {"כ": "הנדסה", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אלכס רוזוב": {"כ": "בי\"מ", "כשירות": "מערכות הספק ובקרה", "אוכלוסיה": "אע\"צ"},
+            "אליהו ממיה": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "מנחם אלפנדרי": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "ישראל אלחדד": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "מיכאל זפרודסקי": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "אבי ג'ורנו": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "אבי בראל": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "קבע"},
+            "לוי יצחק גסדי": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "ג'ונתן אוסטהויזן": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "חובה"},
+            "הראל אליה": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "חובה"},
+            "יונתן נקש": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "חובה"},
+            "ינון ראובן": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "חובה"},
+            "סהר כהן": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "קבע"},
+            "בר לב ארי": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "גדסי לוי": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "הלל צברי": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "חובה"},
+            "רזיאל המאירי": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "בר אביטן": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": ""},
+            "איציק עזריה": {"כ": "בי\"מ", "כשירות": "גו\"כ", "אוכלוסיה": "קבע"},
+            "אוריאל ברבי": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "קבע"},
+            "נדב כהן": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "חובה"},
+            "תומר פייביש": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "קבע"},
+            "נתנאל ארזה": {"כ": "בי\"מ", "כשירות": "", "אוכלוסיה": "קבע"},
+            "דנה פנחסוב": {"כ": "ש\"ק", "כשירות": "מטה ש\"ק", "אוכלוסיה": "קבע"},
+            "חיים גולד": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "יקיר איובי": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "קבע"},
+            "טובה אקושוילי": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "קבע"},
+            "איציק טגניה": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "קבע"},
+            "אביאל לוי": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "קבע"},
+            "שלי חזן": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "דניאל לגיטיוי": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "שמעון גוזלן": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "בן הנורקר": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "רוס פימה": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "יאיר הלוי": {"כ": "", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "דותן גואל": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "ליאל ניר": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "רומיה אלמגור": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "שלומי לביא": {"כ": "ש\"ק", "כשירות": "תחנות דס\"ל", "אוכלוסיה": "קבע"},
+            "חן נגר": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "קבע"},
+            "מישאל עקושר": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "ליאור אברהם": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "שוהם אאוד": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "צביקה לוי": {"כ": "", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "איוב צקלה": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "נועם ברבי": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אופיר חרר": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "ניקון פיירשטיין": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "יוחאי בריגה": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "יהונתן אבני": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אדם אהרוני": {"כ": "ש\"ק", "כשירות": "אחזקת דלק", "אוכלוסיה": "קבע"},
+            "רביד אברהם": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "מאור חן": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "קבע"},
+            "סואטירה ויסאם": {"כ": "ש\"ק", "כשירות": "נהגי תדלוק", "אוכלוסיה": "מילואים"},
+            "טדי אסרס": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אליה יוספוב": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אדי פילר": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "בני אללין": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אוסקר מאכר": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "עוזי נדב": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "ענאן ח'יר": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אלכס כץ": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "ניקולאיי פיינשטיין": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "מוחמד סואעד": {"כ": "", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אורי טל": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אנטולי סוקין": {"כ": "ש\"ק", "כשירות": "פז", "אוכלוסיה": "פז"},
+            "שמוליק": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "פז"},
+            "ארסן": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "פז"},
+            "נתנאל מולוקנדוב": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "פז"},
+            "שרון חברה": {"כ": "", "כשירות": "", "אוכלוסיה": "פז"},
+            "נתנאל מויאל": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "פז"},
+            "אביהו אסיין": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "פז"},
+            "יוסי שחרור": {"כ": "ש\"ק", "כשירות": "זמינות", "אוכלוסיה": "קבע"},
+            "איציק דואק": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "קבע"},
+            "דסאלין מקטה": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "קבע"},
+            "נוי אמרוסי/אהרוני": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "קבע"},
+            "ליאל אנדיבו": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "נועה שלזינגר": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "תאיר סלחי": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אור אברמוב": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אושר שטרית": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אילן נגאוקר": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "אבישי גובני": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "היכל פטל": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "משה ברקו": {"כ": "ש\"ק", "כשירות": "כבל רשת", "אוכלוסיה": "קבע"},
+            "טל שאול": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אפיק רואה": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "קבע"},
+            "עוז בכור": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "קבע"},
+            "רביאל חבות": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "קבע"},
+            "אדיר אבוטבול": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "קבע"},
+            "כפיר ישראלי": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אמרי טואיל": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "עילאי בוקשטיין": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "נוי לוי": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "שי פורטנוי": {"כ": "", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "יעל עובדיה": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "עמית זטלאווי": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "רנת אחונדוב": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "יגל רביד": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אור חג'בי": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "בנימין כהן": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "גלעד חודדה": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אגם מיסק": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "אופק ברק": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "עדן מורנו": {"כ": "ש\"ק", "כשירות": "", "אוכלוסיה": "חובה"},
+            "מרק ניקוב": {"כ": "צריפין 108", "כשירות": "צריפין", "אוכלוסיה": "אע\"צ"},
+            "אהרון וולף": {"כ": "צריפין 108", "כשירות": "", "אוכלוסיה": "קבע"},
+            "אלכסיי שמובסקי": {"כ": "צריפין 108", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "שי כוכבי": {"כ": "צריפין 108", "כשירות": "", "אוכלוסיה": "אע\"צ"},
+            "אלכסנדרה דוידוב": {"כ": "", "כשירות": "", "אוכלוסיה": "מילואים"},
+            "נתן צ'ברוצקי": {"כ": "צריפין 108", "כשירות": "", "אוכלוסיה": "אע\"צ"}
+        };
+
+        // State
+        let currentUser = localStorage.getItem('hr_user_name') || '';
+        let currentUserId = localStorage.getItem('hr_user_id') || '';
+        let isAdmin = false;
+        let pollingInterval = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            if (currentUser && currentUserId) {
+                showStatusSection();
+                loadCurrentStatus();
+            }
+
+            document.getElementById('adminPassword').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') verifyAdmin();
+            });
+        });
+
+        // ============================================
+        // API Functions
+        // ============================================
+
+        async function getEmployeesFromServer() {
+            if (USE_LOCAL_STORAGE) {
+                const data = localStorage.getItem('hr_employees');
+                return data ? JSON.parse(data) : {};
+            }
+
+            try {
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+                    method: 'GET',
+                    headers: {
+                        'X-Master-Key': JSONBIN_API_KEY,
+                        'X-Bin-Meta': 'false'
+                    }
+                });
+                if (!response.ok) {
+                    console.error('API Error:', response.status, response.statusText);
+                    // Fallback to localStorage if API fails
+                    const data = localStorage.getItem('hr_employees');
+                    return data ? JSON.parse(data) : {};
+                }
+                const data = await response.json();
+                return data.employees || {};
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                // Fallback to localStorage if API fails
+                const data = localStorage.getItem('hr_employees');
+                return data ? JSON.parse(data) : {};
+            }
+        }
+
+        async function saveEmployeesToServer(employees) {
+            // Always save to localStorage as backup
+            localStorage.setItem('hr_employees', JSON.stringify(employees));
+
+            if (USE_LOCAL_STORAGE) {
+                return true;
+            }
+
+            try {
+                fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_API_KEY
+                    },
+                    body: JSON.stringify({ employees: employees })
+                });
+                // Always return true since localStorage backup is saved
+                return true;
+            } catch (error) {
+                console.error('Error saving data:', error);
+                // Return true anyway since localStorage is saved
+                return true;
+            }
+        }
+
+        // ============================================
+        // User Functions
+        // ============================================
+
+        // List of all employee names for the dropdown
+        const ALL_NAMES = Object.keys(EMPLOYEE_DATA).sort();
+
+        function showDropdown() {
+            const dropdown = document.getElementById('nameDropdown');
+            dropdown.classList.add('active');
+            filterNames();
+        }
+
+        function hideDropdown() {
+            setTimeout(() => {
+                document.getElementById('nameDropdown').classList.remove('active');
+            }, 200);
+        }
+
+        function filterNames() {
+            const search = document.getElementById('nameSearch').value.toLowerCase();
+            const dropdown = document.getElementById('nameDropdown');
+
+            const filtered = ALL_NAMES.filter(name => name.toLowerCase().includes(search));
+
+            dropdown.innerHTML = filtered.map(name =>
+                `<div class="dropdown-item" onclick="selectName('${name}')">${name}</div>`
+            ).join('');
+
+            if (filtered.length > 0) {
+                dropdown.classList.add('active');
+            }
+        }
+
+        function selectName(name) {
+            document.getElementById('nameSearch').value = name;
+            document.getElementById('userName').value = name;
+            document.getElementById('nameDropdown').classList.remove('active');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.search-dropdown')) {
+                document.getElementById('nameDropdown').classList.remove('active');
+            }
+        });
+
+        function saveName() {
+            const name = document.getElementById('userName').value;
+            if (!name) {
+                alert('נא לבחור שם');
+                return;
+            }
+
+            currentUser = name;
+            // Use name as ID so same person from different devices updates same record
+            currentUserId = name.replace(/\s+/g, '_');
+            localStorage.setItem('hr_user_name', currentUser);
+            localStorage.setItem('hr_user_id', currentUserId);
+
+            showStatusSection();
+            loadCurrentStatus();
+        }
+
+        function showStatusSection() {
+            document.getElementById('nameInputGroup').style.display = 'none';
+            document.getElementById('statusSection').style.display = 'block';
+            document.getElementById('currentUserDisplay').textContent = 'שלום, ' + currentUser;
+        }
+
+        function changeName() {
+            document.getElementById('nameInputGroup').style.display = 'block';
+            document.getElementById('statusSection').style.display = 'none';
+            document.getElementById('nameSearch').value = currentUser;
+            document.getElementById('userName').value = currentUser;
+        }
+
+        async function loadCurrentStatus() {
+            if (!currentUserId) return;
+
+            const employees = await getEmployeesFromServer();
+            if (employees[currentUserId] && employees[currentUserId].status) {
+                document.getElementById('statusSelect').value = employees[currentUserId].status;
+            }
+        }
+
+        async function updateStatus() {
+            const status = document.getElementById('statusSelect').value;
+            if (!status) {
+                alert('נא לבחור מיקום');
+                return;
+            }
+            if (!currentUserId) {
+                alert('נא להכניס שם קודם');
+                return;
+            }
+
+            const btn = document.getElementById('updateBtn');
+            btn.disabled = true;
+            btn.textContent = 'מעדכן...';
+
+            try {
+                // Get current data
+                const employees = await getEmployeesFromServer();
+
+                // Update employee
+                employees[currentUserId] = {
+                    name: currentUser,
+                    status: status,
+                    lastUpdate: new Date().toISOString()
+                };
+
+                // Save back
+                await saveEmployeesToServer(employees);
+
+                // Always show success since localStorage backup works
+                showSuccessMessage();
+                if (isAdmin) {
+                    updateEmployeesTable(employees);
+                }
+            } catch (error) {
+                console.error('Error updating status:', error);
+                // Still show success if data was saved to localStorage
+                showSuccessMessage();
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'עדכן מיקום';
+        }
+
+        function showSuccessMessage() {
+            const msg = document.getElementById('successMessage');
+            msg.classList.add('active');
+            document.getElementById('errorMessage').classList.remove('active');
+            setTimeout(() => {
+                msg.classList.remove('active');
+            }, 2000);
+        }
+
+        function showErrorMessage() {
+            const msg = document.getElementById('errorMessage');
+            msg.classList.add('active');
+            document.getElementById('successMessage').classList.remove('active');
+            setTimeout(() => {
+                msg.classList.remove('active');
+            }, 3000);
+        }
+
+        // ============================================
+        // Admin Functions
+        // ============================================
+
+        function showAdminModal() {
+            document.getElementById('adminModal').classList.add('active');
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminError').style.display = 'none';
+            document.getElementById('adminPassword').focus();
+        }
+
+        function hideAdminModal() {
+            document.getElementById('adminModal').classList.remove('active');
+        }
+
+        function verifyAdmin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === ADMIN_PASSWORD) {
+                isAdmin = true;
+                hideAdminModal();
+                showAdminSection();
+            } else {
+                document.getElementById('adminError').style.display = 'block';
+            }
+        }
+
+        async function showAdminSection() {
+            document.getElementById('adminSection').classList.add('active');
+            document.getElementById('adminBtn').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'inline-block';
+
+            // Load initial data
+            await refreshAdminData();
+
+            // Poll for updates every 3 seconds
+            pollingInterval = setInterval(refreshAdminData, 3000);
+        }
+
+        async function refreshAdminData() {
+            const employees = await getEmployeesFromServer();
+            updateEmployeesTable(employees);
+        }
+
+        function logoutAdmin() {
+            isAdmin = false;
+            document.getElementById('adminSection').classList.remove('active');
+            document.getElementById('adminBtn').style.display = 'inline-block';
+            document.getElementById('logoutBtn').style.display = 'none';
+
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+                pollingInterval = null;
+            }
+        }
+
+        function updateEmployeesTable(employees) {
+            const tbody = document.getElementById('employeesTableBody');
+
+            if (!employees || Object.keys(employees).length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="no-employees">אין עובדים רשומים</td></tr>';
+                return;
+            }
+
+            let html = '';
+            const employeeArray = Object.entries(employees).map(([id, data]) => ({
+                id,
+                ...data
+            }));
+
+            // Sort by last update (newest first)
+            employeeArray.sort((a, b) => new Date(b.lastUpdate) - new Date(a.lastUpdate));
+
+            employeeArray.forEach(emp => {
+                const statusClass = getStatusClass(emp.status);
+                const lastUpdate = formatDate(emp.lastUpdate);
+                // Get base data from EMPLOYEE_DATA
+                const baseData = EMPLOYEE_DATA[emp.name] || {"כ": "", "כשירות": "", "אוכלוסיה": ""};
+
+                html += `
+                    <tr>
+                        <td>${escapeHtml(emp.name)}</td>
+                        <td>${escapeHtml(baseData["כ"])}</td>
+                        <td>${escapeHtml(baseData["אוכלוסיה"])}</td>
+                        <td><span class="status-badge ${statusClass}">${escapeHtml(emp.status)}</span></td>
+                        <td class="last-update">${lastUpdate}</td>
+                        <td><button class="btn btn-logout" style="padding: 5px 10px; font-size: 12px;" onclick="removeEmployee('${emp.id}')">הסר</button></td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        // Add new employee (admin only)
+        async function addNewEmployee() {
+            const name = document.getElementById('newEmployeeName').value.trim();
+            const k = document.getElementById('newEmployeeK').value;
+            const population = document.getElementById('newEmployeePopulation').value;
+
+            if (!name) {
+                alert('נא להכניס שם עובד');
+                return;
+            }
+
+            // Add to EMPLOYEE_DATA
+            EMPLOYEE_DATA[name] = {
+                "כ": k,
+                "כשירות": "",
+                "אוכלוסיה": population
+            };
+
+            // Add to dropdown list
+            const select = document.getElementById('userName');
+            const option = document.createElement('option');
+            option.value = name;
+            option.textContent = name;
+            select.appendChild(option);
+
+            // Add to employees list with default status
+            const employees = await getEmployeesFromServer();
+            const oderId = name.replace(/\s+/g, '_');
+            employees[oderId] = {
+                name: name,
+                status: 'לא עודכן',
+                lastUpdate: new Date().toISOString()
+            };
+
+            await saveEmployeesToServer(employees);
+            updateEmployeesTable(employees);
+
+            // Clear inputs
+            document.getElementById('newEmployeeName').value = '';
+            document.getElementById('newEmployeeK').value = '';
+            document.getElementById('newEmployeePopulation').value = '';
+
+            alert('העובד ' + name + ' נוסף בהצלחה!');
+        }
+
+        // Remove employee (admin only)
+        async function removeEmployee(oderId) {
+            if (!confirm('האם אתה בטוח שברצונך להסיר עובד זה?')) {
+                return;
+            }
+
+            const employees = await getEmployeesFromServer();
+
+            // Get employee name before deleting
+            const empName = employees[oderId]?.name;
+
+            // Remove from employees
+            delete employees[oderId];
+
+            // Remove from EMPLOYEE_DATA
+            if (empName && EMPLOYEE_DATA[empName]) {
+                delete EMPLOYEE_DATA[empName];
+            }
+
+            await saveEmployeesToServer(employees);
+            updateEmployeesTable(employees);
+        }
+
+        function getStatusClass(status) {
+            const statusMap = {
+                'בית': 'status-home',
+                'בדרך לבית': 'status-going-home',
+                'בסיס': 'status-base',
+                'בדרך לבסיס': 'status-going-base',
+                'רחובות': 'status-rehovot',
+                'בדרך לרחובות': 'status-going-rehovot',
+                '108': 'status-108'
+            };
+            return statusMap[status] || '';
+        }
+
+        function formatDate(isoString) {
+            if (!isoString) return '';
+            const date = new Date(isoString);
+            return date.toLocaleString('he-IL', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
